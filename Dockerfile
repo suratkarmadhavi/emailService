@@ -12,7 +12,7 @@ RUN ls
 RUN pwd
 
 # Copy the compiled JAR from the build stage into the container
-COPY --from=build /app/target/emailapi-0.0.1-SNAPSHOT.jar app1.jar
+# COPY /app/target/emailapi-0.0.1-SNAPSHOT.jar app1.jar
 
 # Run the Spring Boot application when the container starts
-CMD ["java", "-jar", "app1.jar"]
+CMD ["java", "-jar", "target/emailapi-0.0.1-SNAPSHOT.jar"]
