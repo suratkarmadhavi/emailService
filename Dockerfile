@@ -1,32 +1,18 @@
-# Use a lightweight base image for Java
-
-# Dockerfile
-
+# Use a lightweight base image for Maven
 FROM openjdk:17-jdk-slim
-
  
 # Set the working directory inside the container
-
 WORKDIR /app
 
-RUN pwd
-
-# COPY . .
+# Copy the source code into the container
+COPY . .
 
 RUN ls
 
-# RUN ls ServiceRegistry/target
+RUN pwd
 
-# Copy the Spring Boot application JAR into the container
+# Copy the compiled JAR from the build stage into the container
+COPY --from=build /app/target/OneHealth-PatientUser-0.0.1-SNAPSHOT.jar app1.jar
 
-COPY target/emailapi-0.0.1-SNAPSHOT.jar app1.jar
-
-# COPY feesservice.jar app.jar
-
- # Expose the port your Spring Boot application is running on (change the port accordingly)
-
-#EXPOSE 8089
-
- # Run the Spring Boot application when the container starts
-
+# Run the Spring Boot application when the container starts
 CMD ["java", "-jar", "app1.jar"]
