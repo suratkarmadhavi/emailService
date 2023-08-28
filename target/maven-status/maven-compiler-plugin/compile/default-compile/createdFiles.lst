@@ -1,0 +1,7 @@
+com\email\controller\EmailController.class
+com\email\service\EmailService.class
+com\email\DT\AppointmentDTO.class
+com\email\service\EmailService$2.class
+com\email\EmailapiApplication.class
+com\email\service\EmailService$1.class
+com\email\entity\EmailRequest.class

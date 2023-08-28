@@ -42,7 +42,7 @@ public class EmailController {
 	}
 
 	@PostMapping("/sendotp")
-	public ResponseEntity<?> sendEmail(@RequestBody EmailRequest request, HttpSession session) {
+	public ResponseEntity<?> sendEmail(@RequestBody EmailRequest request) {
 		try {
 			// Generating OTP of 6 digits
 			Random random = new Random();
