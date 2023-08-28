@@ -171,7 +171,7 @@ public class EmailService {
 
 	    private String readHtmlFromTemplate(String templateFileName) throws IOException {
 	        try (FileSystem zipFileSystem = createZipFileSystem()) {
-	            Path templatePath = zipFileSystem.getPath("/templates/" + templateFileName);
+	            Path templatePath = zipFileSystem.getPath("/src/main/resources/templates/" + templateFileName);
 	            byte[] contentBytes = Files.readAllBytes(templatePath);
 	            return new String(contentBytes, StandardCharsets.UTF_8);
 	        }
