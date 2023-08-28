@@ -1,11 +1,13 @@
 package com.email.service;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -14,14 +16,13 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import org.springframework.core.io.ClassPathResource;
-
 import org.springframework.stereotype.Service;
-
 import com.email.DT.AppointmentDTO;
 
-
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 
 
@@ -169,14 +170,19 @@ public class EmailService {
 	    }
 
 	    private String readHtmlFromTemplate(String templateFileName) throws IOException {
+	        try (FileSystem zipFileSystem = createZipFileSystem()) {
+	            Path templatePath = zipFileSystem.getPath("/templates/" + templateFileName);
+	            byte[] contentBytes = Files.readAllBytes(templatePath);
+	            return new String(contentBytes, StandardCharsets.UTF_8);
+	        }
+	    }
 
-	        ClassPathResource resource = new ClassPathResource("templates/" + templateFileName);
-
-	    	byte[] contentBytes = Files.readAllBytes(Paths.get(resource.getURI()));
-
-	    	return new String(contentBytes, StandardCharsets.UTF_8);
-
-	    	}
+	    private FileSystem createZipFileSystem() throws IOException {
+	        Map<String, String> env = new HashMap<>();
+	        env.put("create", "true");
+	        URI uri = URI.create("jar:file:target/emailapi-0.0.1-SNAPSHOT.jar");
+	        return FileSystems.newFileSystem(uri, env);
+	    }
 	    
 	    private String getNonNullString(Object value) {
 	        return (value != null) ? value.toString() : "";
