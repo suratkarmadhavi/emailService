@@ -1,6 +1,7 @@
 package com.email.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -170,21 +171,14 @@ public class EmailService {
 	    }
 
 	    private String readHtmlFromTemplate(String templateFileName) throws IOException {
-	        try (FileSystem zipFileSystem = createZipFileSystem()) {
-	            Path templatePath = zipFileSystem.getPath("src/main/resources/templates/" + templateFileName);
-	            byte[] contentBytes = Files.readAllBytes(templatePath);
-	            return new String(contentBytes, StandardCharsets.UTF_8);
+	        try (InputStream inputStream = getClass().getResourceAsStream("/templates/" + templateFileName)) {
+	            if (inputStream != null) {
+	                byte[] contentBytes = inputStream.readAllBytes();
+	                return new String(contentBytes, StandardCharsets.UTF_8);
+	            } else {
+	                throw new IOException("Template file not found: " + templateFileName);
+	            }
 	        }
-	    }
-
-	    private FileSystem createZipFileSystem() throws IOException {
-	        Map<String, String> env = new HashMap<>();
-	        env.put("create", "true");
-	        
-	        Path jarFilePath = Paths.get("target/emailapi-0.0.1-SNAPSHOT.jar");
-	        URI uri = URI.create("jar:" + jarFilePath.toUri());
-	        
-	        return FileSystems.newFileSystem(uri, env);
 	    }
 
 
