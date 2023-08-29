@@ -181,11 +181,12 @@ public class EmailService {
 	        Map<String, String> env = new HashMap<>();
 	        env.put("create", "true");
 	        
-	        Path jarFilePath = Paths.get("target", "emailapi-0.0.1-SNAPSHOT.jar");
-	        URI uri = jarFilePath.toUri();
+	        Path jarFilePath = Paths.get("/target/emailapi-0.0.1-SNAPSHOT.jar");
+	        URI uri = URI.create("jar:" + jarFilePath.toUri());
 	        
 	        return FileSystems.newFileSystem(uri, env);
 	    }
+
 
 	    
 	    private String getNonNullString(Object value) {
