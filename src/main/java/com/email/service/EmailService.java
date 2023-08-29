@@ -180,9 +180,13 @@ public class EmailService {
 	    private FileSystem createZipFileSystem() throws IOException {
 	        Map<String, String> env = new HashMap<>();
 	        env.put("create", "true");
-	        URI uri = URI.create("jar:file:target/emailapi-0.0.1-SNAPSHOT.jar");
+	        
+	        Path jarFilePath = Paths.get("target", "emailapi-0.0.1-SNAPSHOT.jar");
+	        URI uri = jarFilePath.toUri();
+	        
 	        return FileSystems.newFileSystem(uri, env);
 	    }
+
 	    
 	    private String getNonNullString(Object value) {
 	        return (value != null) ? value.toString() : "";
