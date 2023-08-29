@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+        <tr>
+            <td align="center" bgcolor="#f4f4f4" style="padding: 20px;">
+                <h1 style="color: #333;">Appointment Confirmation</h1>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 20px;">
+                <p>Dear Dr. {{doctor_name}},</p>
+                <p>Your appointment with {{patient_name}} has been successfully scheduled at [Clinic/Hospital Name]. Below are the details:</p>
+                <ul>
+                    <li><strong>Date:</strong> {{appointment_date}}</li>
+                    <li><strong>Time:</strong> {{appointment_time}}</li>
+                    <li><strong>Location:</strong> {{address}} </li>
+                    <li><strong>Patient:</strong> {{patient_name}}</li>
+                    <li><strong>Contact:</strong> {{contact}}</li>
+                </ul>
+                <p>We appreciate your commitment to providing quality care to our patients. If there are any changes or updates, please let us know as soon as possible.</p>
+                <p>Thank you for your dedication and service. We look forward to a successful appointment.</p>
+                <p>Best regards,</p>
+                <p>The [Clinic/Hospital Name] Team</p>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#f4f4f4" align="center" style="padding: 20px;">
+                <p style="color: #777;">This is an automated email. Please do not reply.</p>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

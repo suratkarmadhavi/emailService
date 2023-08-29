@@ -72,6 +72,7 @@ public class EmailController {
 	public void sendAppointmentEmail(@RequestBody AppointmentDTO appointmentDTO) {
 		System.out.println("Inside Send Email For Appointment Booking !!");
 		System.out.println(appointmentDTO);
-		emailservice.sendAppointmentEmail(appointmentDTO);
+		emailservice.sendDoctorAppointmentEmail(appointmentDTO);
+		emailservice.sendPatientAppointmentEmail(appointmentDTO);
 	}
 }
