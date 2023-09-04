@@ -278,7 +278,7 @@ public class EmailService {
 	            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
 
 	            // Set the email subject and content type
-	            message.setSubject("Appointment Confirmation with Patient");
+	            message.setSubject("Appointment Confirmation with Doctor");
 
 	            // Get the HTML content from a template
 	            String htmlContent = readHtmlFromTemplate("PatientAppointment.html");
