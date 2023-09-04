@@ -1,19 +1,18 @@
-package com.email.DT;
+package com.email.DT; // Package declaration
 
-
-import java.sql.Time;
-import java.sql.Date;
-
+import java.sql.Time; // Importing Time class from java.sql package
+import java.sql.Date; // Importing Date class from java.sql package
 
 /**
  * Entity class representing an appointment.
  * This class is mapped to a database table to store appointment details.
  * 
- * @author Anup
- * @version 3.9.10
+ * @author Madhavi
+ * @version 1.0
  */
 public class AppointmentDTO {
 
+	// Private member variables to store appointment details
 	private long appointment_id;
 	private long doctorId;
 	private long patientId;
@@ -34,8 +33,6 @@ public class AppointmentDTO {
 	private String patient_email;
 	private String doctor_email;
 
-	// Constructors, getters, and setters are provided below...
-
 	// Default constructor for Appointment class.
 	public AppointmentDTO() {
 
@@ -51,6 +48,7 @@ public class AppointmentDTO {
 				+ amount_paid + ", patient_email=" + patient_email + ", doctor_email=" + doctor_email + "]";
 	}
 
+	// Parameterized constructor to initialize all member variables
 	public AppointmentDTO(long appointment_id, long doctorId, long patientId, String doctor_name, String contact,
 			String patient_name, int age, String gender, String description, Date date, Time appointmentTime,
 			String status, String type, String payment_mode, String transaction_id, String address, int amount_paid,
@@ -77,6 +75,7 @@ public class AppointmentDTO {
 		this.doctor_email = doctor_email;
 	}
 
+	// Getter and setter methods for all member variables
 	public long getAppointment_id() {
 		return appointment_id;
 	}
@@ -228,7 +227,5 @@ public class AppointmentDTO {
 	public void setDoctor_email(String doctor_email) {
 		this.doctor_email = doctor_email;
 	}
-
-	
 
 }

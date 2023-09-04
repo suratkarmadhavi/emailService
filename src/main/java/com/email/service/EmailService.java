@@ -25,16 +25,20 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
-
-
-
+/**
+ * Entity class representing an email service.
+ * 
+ * @author Madhavi
+ * @version 1.0
+ */
 @Service
 public class EmailService {
-	
-	    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(EmailService.class);
-	   
-	    public boolean sendEmail(String subject, String otp, String to) throws IOException {
-        // Variable for Gmail
+    
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(EmailService.class);
+   
+    // Method to send an email with a one-time password (OTP)
+    public boolean sendEmail(String subject, String otp, String to) throws IOException {
+        // Email configuration for Gmail
         String from = "onehealthinfobell@gmail.com";
         String host = "smtp.gmail.com";
         boolean f = false;
@@ -43,19 +47,18 @@ public class EmailService {
         String userName = "onehealthinfobell@gmail.com";
         String password = "njepyniemgzrybpi";
 
-        // Get the system property
+        // Get the system properties
         Properties properties = System.getProperties();
         System.out.print("PROPERTIES " + properties);
 
+        // Read the email template from a file
         String templateFileName = "email.html";
-
         String htmlContent = readHtmlFromTemplate(templateFileName);
-        
 
-        htmlContent = htmlContent.replace("{{otp}}",String.valueOf(otp));
+        // Replace placeholders in the email template with the OTP
+        htmlContent = htmlContent.replace("{{otp}}", String.valueOf(otp));
 
- 
-        // Set host
+        // Set email host properties
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", 465);
         properties.put("mail.smtp.ssl.enable", "true");
@@ -73,8 +76,6 @@ public class EmailService {
 
         // Step 2: Compose the message [text, multimedia]
         MimeMessage m = new MimeMessage(session);
-//        MimeMessageHelper mime=new MimeMessageHelper(m , true);
-        
         
         try {
             // From mail
@@ -86,9 +87,9 @@ public class EmailService {
             // Adding subject to message
             m.setSubject(subject);
 
-            // Adding text to message
-//            m.setText(message);
+            // Adding HTML content to message
             m.setContent(htmlContent, "text/html");
+
             // Step 3: Send the message using the Transport class
             Transport.send(m);
 
@@ -100,232 +101,164 @@ public class EmailService {
         return f;
     }
 
-	    
-	   
-	  //  sendAppointmentEmail common
-//	    public void sendAppointmentEmail(AppointmentDTO appointmentdto) {
-//	        System.out.println("Inside Send Email For Appointment Booking !!");
-//	        System.out.println(appointmentdto);
-//	        
-//	        // Sender's email and password
-//	        String senderEmail = "onehealthinfobell@gmail.com"; // Replace with your sender email
-//	        String senderPassword = "njepyniemgzrybpi"; // Replace with your sender email password
-//
-//	        // Recipient's email
-//	        String recipientEmail = appointmentdto.getPatient_email(); // Assuming appointment has a patient email field
-//	        System.out.println(recipientEmail);
-//	        String doctorEmail = appointmentdto.getDoctor_email();
-//	        System.out.println(doctorEmail);
-//	        // Email properties
-//	        Properties props = new Properties();
-//	        props.put("mail.smtp.auth", "true");
-//	        props.put("mail.smtp.starttls.enable", "true");
-//	        props.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP host
-//	        props.put("mail.smtp.port", "587"); // Replace with your SMTP port
-//
-//	        // Create a session with the email credentials
-//	        Session session = Session.getInstance(props, new Authenticator() {
-//	            @Override
-//	            protected PasswordAuthentication getPasswordAuthentication() {
-//	                return new PasswordAuthentication(senderEmail, senderPassword);
-//	            }
-//	        });
-//
-//	        try {
-//	            // Create a MimeMessage object
-//	            MimeMessage message = new MimeMessage(session);
-//
-//	            // Set the sender and recipient addresses
-//	            message.setFrom(new InternetAddress(senderEmail));
-//	            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-//	            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(doctorEmail));
-//
-//	            // Set the email subject and content type
-//	            message.setSubject("Appointment Confirmation");
-//
-//	            // Get the HTML content from a template
-//	            String htmlContent = readHtmlFromTemplate("appointment.html");
-//	            
-//	            // Replace placeholders in HTML content
-//
-//	        	            htmlContent = htmlContent.replace("{{patient_name}}", getNonNullString(appointmentdto.getPatient_name()));
-//	        	            htmlContent = htmlContent.replace("{{doctor_name}}", getNonNullString(appointmentdto.getDoctor_name()));
-//	        	            htmlContent = htmlContent.replace("{{contact}}", getNonNullString(appointmentdto.getContact()));
-//	        	            htmlContent = htmlContent.replace("{{description}}", getNonNullString(appointmentdto.getDescription()));
-//	        	            htmlContent = htmlContent.replace("{{appointment_date}}", getNonNullString(appointmentdto.getDate()));
-//	        	            htmlContent = htmlContent.replace("{{appointment_time}}", getNonNullString(appointmentdto.getAppointmentTime()));
-//	        	            htmlContent = htmlContent.replace("{{address}}", getNonNullString(appointmentdto.getAddress()));
-//	            // Set the HTML content of the message
-//	            message.setContent(htmlContent, "text/html");
-//
-//	            // Send the email
-//	            Transport.send(message);
-//
-//	            LOGGER.info("Email sent to: {}", recipientEmail);
-//	        } catch (MessagingException e) {
-//	            LOGGER.error("Error sending email: {}", e.getMessage());
-//	        } catch (IOException e) {
-//	            e.printStackTrace();
-//	        }
-//
-//	    }
+    
+    
+    
+    
+    // Method to send an email to a doctor for appointment booking
+    public void sendDoctorAppointmentEmail(AppointmentDTO appointmentdto) {
+        System.out.println("Inside Send Email For Appointment Booking !!");
+        System.out.println(appointmentdto);
+        
+        // Sender's email and password
+        String senderEmail = "onehealthinfobell@gmail.com"; // Replace with your sender email
+        String senderPassword = "njepyniemgzrybpi"; // Replace with your sender email password
 
-	    
-	    
-	//sendDoctorAppointmentEmail   
-	    
-	    public void sendDoctorAppointmentEmail(AppointmentDTO appointmentdto) {
-	        System.out.println("Inside Send Email For Appointment Booking !!");
-	        System.out.println(appointmentdto);
-	        
-	        // Sender's email and password
-	        String senderEmail = "onehealthinfobell@gmail.com"; // Replace with your sender email
-	        String senderPassword = "njepyniemgzrybpi"; // Replace with your sender email password
+        String doctorEmail = appointmentdto.getDoctor_email();
+        System.out.println(doctorEmail);
+        
+        // Email properties
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP host
+        props.put("mail.smtp.port", "587"); // Replace with your SMTP port
 
-	        String doctorEmail = appointmentdto.getDoctor_email();
-	        System.out.println(doctorEmail);
-	        // Email properties
-	        Properties props = new Properties();
-	        props.put("mail.smtp.auth", "true");
-	        props.put("mail.smtp.starttls.enable", "true");
-	        props.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP host
-	        props.put("mail.smtp.port", "587"); // Replace with your SMTP port
+        // Create a session with the email credentials
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, senderPassword);
+            }
+        });
 
-	        // Create a session with the email credentials
-	        Session session = Session.getInstance(props, new Authenticator() {
-	            @Override
-	            protected PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(senderEmail, senderPassword);
-	            }
-	        });
+        try {
+            // Create a MimeMessage object
+            MimeMessage message = new MimeMessage(session);
 
-	        try {
-	            // Create a MimeMessage object
-	            MimeMessage message = new MimeMessage(session);
+            // Set the sender and recipient addresses
+            message.setFrom(new InternetAddress(senderEmail));
+         
+            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(doctorEmail));
 
-	            // Set the sender and recipient addresses
-	            message.setFrom(new InternetAddress(senderEmail));
-	         
-	            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(doctorEmail));
+            // Set the email subject and content type
+            message.setSubject("Appointment Confirmation with Patient");
 
-	            // Set the email subject and content type
-	            message.setSubject("Appointment Confirmation with Patient");
+            // Get the HTML content from a template
+            String htmlContent = readHtmlFromTemplate("DoctorAppointment.html");
+            
+            // Replace placeholders in HTML content
+            htmlContent = htmlContent.replace("{{doctor_name}}", getNonNullString(appointmentdto.getDoctor_name()));
+            htmlContent = htmlContent.replace("{{patient_name}}", getNonNullString(appointmentdto.getPatient_name()));
+            htmlContent = htmlContent.replace("{{contact}}", getNonNullString(appointmentdto.getContact()));
+            htmlContent = htmlContent.replace("{{description}}", getNonNullString(appointmentdto.getDescription()));
+            htmlContent = htmlContent.replace("{{appointment_date}}", getNonNullString(appointmentdto.getDate()));
+            htmlContent = htmlContent.replace("{{appointment_time}}", getNonNullString(appointmentdto.getAppointmentTime()));
+            htmlContent = htmlContent.replace("{{address}}", getNonNullString(appointmentdto.getAddress()));
+            
+            // Set the HTML content of the message
+            message.setContent(htmlContent, "text/html");
 
-	            // Get the HTML content from a template
-	            String htmlContent = readHtmlFromTemplate("DoctorAppointment.html");
-	            
-	            // Replace placeholders in HTML content
-	            			htmlContent = htmlContent.replace("{{doctor_name}}", getNonNullString(appointmentdto.getDoctor_name()));
-	        	            htmlContent = htmlContent.replace("{{patient_name}}", getNonNullString(appointmentdto.getPatient_name()));
-	        	          
-	        	            htmlContent = htmlContent.replace("{{contact}}", getNonNullString(appointmentdto.getContact()));
-	        	            htmlContent = htmlContent.replace("{{description}}", getNonNullString(appointmentdto.getDescription()));
-	        	            htmlContent = htmlContent.replace("{{appointment_date}}", getNonNullString(appointmentdto.getDate()));
-	        	            htmlContent = htmlContent.replace("{{appointment_time}}", getNonNullString(appointmentdto.getAppointmentTime()));
-	        	            htmlContent = htmlContent.replace("{{address}}", getNonNullString(appointmentdto.getAddress()));
-	            // Set the HTML content of the message
-	            message.setContent(htmlContent, "text/html");
+            // Send the email
+            Transport.send(message);
 
-	            // Send the email
-	            Transport.send(message);
+            LOGGER.info("Email sent to: {}", doctorEmail);
+        } catch (MessagingException e) {
+            LOGGER.error("Error sending email: {}", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    
 
-	            LOGGER.info("Email sent to: {}", doctorEmail);
-	        } catch (MessagingException e) {
-	            LOGGER.error("Error sending email: {}", e.getMessage());
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+    // Method to send an email to a patient for appointment booking
+    public void sendPatientAppointmentEmail(AppointmentDTO appointmentdto) {
+        System.out.println("Inside Send Email For Appointment Booking !!");
+        System.out.println(appointmentdto);
+        
+        // Sender's email and password
+        String senderEmail = "onehealthinfobell@gmail.com"; // Replace with your sender email
+        String senderPassword = "njepyniemgzrybpi"; // Replace with your sender email password
 
-	    }
-	    
-	    
-	    
-	    
-//sendPatientAppointmentEmail   
-	    
-	    public void sendPatientAppointmentEmail(AppointmentDTO appointmentdto) {
-	        System.out.println("Inside Send Email For Appointment Booking !!");
-	        System.out.println(appointmentdto);
-	        
-	        // Sender's email and password
-	        String senderEmail = "onehealthinfobell@gmail.com"; // Replace with your sender email
-	        String senderPassword = "njepyniemgzrybpi"; // Replace with your sender email password
+        String recipientEmail = appointmentdto.getPatient_email(); // Assuming appointment has a patient email field
+        System.out.println(recipientEmail);
+        
+        // Email properties
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP host
+        props.put("mail.smtp.port", "587"); // Replace with your SMTP port
 
-	        String recipientEmail = appointmentdto.getPatient_email(); // Assuming appointment has a patient email field
-	        System.out.println(recipientEmail);
-	        // Email properties
-	        Properties props = new Properties();
-	        props.put("mail.smtp.auth", "true");
-	        props.put("mail.smtp.starttls.enable", "true");
-	        props.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP host
-	        props.put("mail.smtp.port", "587"); // Replace with your SMTP port
+        // Create a session with the email credentials
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, senderPassword);
+            }
+        });
 
-	        // Create a session with the email credentials
-	        Session session = Session.getInstance(props, new Authenticator() {
-	            @Override
-	            protected PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(senderEmail, senderPassword);
-	            }
-	        });
+        try {
+            // Create a MimeMessage object
+            MimeMessage message = new MimeMessage(session);
 
-	        try {
-	            // Create a MimeMessage object
-	            MimeMessage message = new MimeMessage(session);
+            // Set the sender and recipient addresses
+            message.setFrom(new InternetAddress(senderEmail));
+         
+            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
 
-	            // Set the sender and recipient addresses
-	            message.setFrom(new InternetAddress(senderEmail));
-	         
-	            message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
+            // Set the email subject and content type
+            message.setSubject("Appointment Confirmation with Doctor");
 
-	            // Set the email subject and content type
-	            message.setSubject("Appointment Confirmation with Doctor");
+            // Get the HTML content from a template
+            String htmlContent = readHtmlFromTemplate("PatientAppointment.html");
+            
+            // Replace placeholders in HTML content
+            htmlContent = htmlContent.replace("{{doctor_name}}", getNonNullString(appointmentdto.getDoctor_name()));
+            htmlContent = htmlContent.replace("{{patient_name}}", getNonNullString(appointmentdto.getPatient_name()));
+            htmlContent = htmlContent.replace("{{contact}}", getNonNullString(appointmentdto.getContact()));
+            htmlContent = htmlContent.replace("{{description}}", getNonNullString(appointmentdto.getDescription()));
+            htmlContent = htmlContent.replace("{{appointment_date}}", getNonNullString(appointmentdto.getDate()));
+            htmlContent = htmlContent.replace("{{appointment_time}}", getNonNullString(appointmentdto.getAppointmentTime()));
+            htmlContent = htmlContent.replace("{{address}}", getNonNullString(appointmentdto.getAddress()));
+            
+            // Set the HTML content of the message
+            message.setContent(htmlContent, "text/html");
 
-	            // Get the HTML content from a template
-	            String htmlContent = readHtmlFromTemplate("PatientAppointment.html");
-	            
-	            // Replace placeholders in HTML content
-	            			htmlContent = htmlContent.replace("{{doctor_name}}", getNonNullString(appointmentdto.getDoctor_name()));
-	        	            htmlContent = htmlContent.replace("{{patient_name}}", getNonNullString(appointmentdto.getPatient_name()));
-	        	          
-	        	            htmlContent = htmlContent.replace("{{contact}}", getNonNullString(appointmentdto.getContact()));
-	        	            htmlContent = htmlContent.replace("{{description}}", getNonNullString(appointmentdto.getDescription()));
-	        	            htmlContent = htmlContent.replace("{{appointment_date}}", getNonNullString(appointmentdto.getDate()));
-	        	            htmlContent = htmlContent.replace("{{appointment_time}}", getNonNullString(appointmentdto.getAppointmentTime()));
-	        	            htmlContent = htmlContent.replace("{{address}}", getNonNullString(appointmentdto.getAddress()));
-	            // Set the HTML content of the message
-	            message.setContent(htmlContent, "text/html");
+            // Send the email
+            Transport.send(message);
 
-	            // Send the email
-	            Transport.send(message);
+            LOGGER.info("Email sent to: {}", recipientEmail);
+        } catch (MessagingException e) {
+            LOGGER.error("Error sending email: {}", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	            LOGGER.info("Email sent to: {}", recipientEmail);
-	        } catch (MessagingException e) {
-	            LOGGER.error("Error sending email: {}", e.getMessage());
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+    
+    
+    
+    // Method to read HTML content from a template file
+    private String readHtmlFromTemplate(String templateFileName) throws IOException {
+        try (InputStream inputStream = getClass().getResourceAsStream("/templates/" + templateFileName)) {
+            if (inputStream != null) {
+                byte[] contentBytes = inputStream.readAllBytes();
+                return new String(contentBytes, StandardCharsets.UTF_8);
+            } else {
+                throw new IOException("Template file not found: " + templateFileName);
+            }
+        }
+    }
+    
+    
+    
 
-	    }
-	    
-	    
-	    private String readHtmlFromTemplate(String templateFileName) throws IOException {
-	        try (InputStream inputStream = getClass().getResourceAsStream("/templates/" + templateFileName)) {
-	            if (inputStream != null) {
-	                byte[] contentBytes = inputStream.readAllBytes();
-	                return new String(contentBytes, StandardCharsets.UTF_8);
-	            } else {
-	                throw new IOException("Template file not found: " + templateFileName);
-	            }
-	        }
-	    }
-
-
-	    
-	    private String getNonNullString(Object value) {
-	        return (value != null) ? value.toString() : "";
-	    }
-
+    // Method to get a non-null string representation of an object
+    private String getNonNullString(Object value) {
+        return (value != null) ? value.toString() : "";
+    }
 }
-
-
-

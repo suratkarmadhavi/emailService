@@ -1,4 +1,4 @@
-# Created at 2023-09-04T10:48:25.633
+# Created at 2023-09-04T11:38:04.892
 Boot Manifest-JAR contains absolute paths in classpath 'D:\InfobellIT_Projects\OneHealth\emailapi\target\test-classes'
 Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
 'other' has different root
